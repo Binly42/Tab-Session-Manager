@@ -199,9 +199,16 @@ const onMessageListener = async (request, _sender, _sendResponse) => {
   }
 };
 
-browser.runtime.onStartup.addListener(onStartupListener);
-browser.runtime.onInstalled.addListener(onInstalledListener);
-browser.runtime.onUpdateAvailable.addListener(onUpdateAvailableListener);
-browser.runtime.onMessage.addListener(onMessageListener);
-browser.commands.onCommand.addListener(onCommandListener);
-init();
+// NOTE: 下面这些log, 手动 `Load Temporary Add-on` 之后也并不一定会出现, 倒是在 Inspect窗口 里再重新 Reload 之后会出现
+//      当然后面排查出了 根因似乎是出在'其他js文件里的未声明变量' 之后似乎就再没出现过这个困扰了
+log.log(logDir, "before background any init");
+
+browser.runtime.onStartup.addListener(onStartupListener);                   log.debug(logDir, "done browser.runtime.onStartup.addListener");
+browser.runtime.onInstalled.addListener(onInstalledListener);               log.debug(logDir, "done browser.runtime.onInstalled.addListener");
+browser.runtime.onUpdateAvailable.addListener(onUpdateAvailableListener);   log.debug(logDir, "done browser.runtime.onUpdateAvailable.addListener");
+browser.runtime.onMessage.addListener(onMessageListener);                   log.debug(logDir, "done browser.runtime.onMessage.addListener");
+browser.commands.onCommand.addListener(onCommandListener);                  log.debug(logDir, "done browser.commands.onCommand.addListener");
+
+log.log(logDir, "before background last init");
+const _init_ret = init();
+log.log(logDir, "done background last init:", _init_ret);

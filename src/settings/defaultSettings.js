@@ -457,6 +457,18 @@ export default [
     ]
   },
   {
+    category: "versionHistoryLabel",
+    elements: [
+      {
+        id: "isEnableVersionHistoryFeature",
+        title: "isEnableVersionHistoryFeatureLabel",
+        captions: ["isEnableVersionHistoryFeatureCaptionLabel"],
+        type: "checkbox",
+        default: true
+      },
+    ]
+  },
+  {
     category: "otherLabel",
     elements: [
       {

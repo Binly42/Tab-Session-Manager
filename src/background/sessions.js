@@ -1,6 +1,9 @@
 import Sessions from "./sessions";
 import log from "loglevel";
 
+import VersionHistory from "./versionHistory";
+window.vh = VersionHistory
+
 const logDir = "background/sessions";
 
 let DB;
@@ -60,8 +63,17 @@ export default {
     }
   },
 
-  put: session => {
+  put: async (session) => {
     log.log(logDir, "put()", session);
+
+    log.log(logDir, "=>=>commit", "begin");
+    const id = await VersionHistory.commit({
+        message: session.name,
+        session,
+    })
+    log.log(logDir, "=>=>commit", "end", `commit id: ${id}`);
+    session.id = id
+
     const db = DB;
     const transaction = db.transaction("sessions", "readwrite");
     const store = transaction.objectStore("sessions");

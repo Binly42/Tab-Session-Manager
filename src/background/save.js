@@ -93,6 +93,7 @@ export async function loadCurrentSession(name, tag, property) {
   }
 
   const ignoredUrlSession = ignoreUrls(session);
+  log.debug(logDir, 'loadCurrentSession() almost end, ready to return Session:', ignoredUrlSession)
 
   return new Promise((resolve, reject) => {
     if (session.tabsNumber > 0) resolve(ignoredUrlSession);
@@ -109,6 +110,10 @@ async function sendMessage(message, options = {}) {
     .catch(() => { });
 }
 
+/**
+ * @param {boolean} isSendResponce  - ? whether this `save` action should send a response (when done)
+ * @param {boolean} saveBySync      -   whether this `save` action is triggered by a `sync-in`
+ */
 export async function saveSession(session, isSendResponce = true, saveBySync = false) {
   log.log(logDir, "saveSession()", session, isSendResponce);
   try {

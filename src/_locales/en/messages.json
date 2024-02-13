@@ -790,5 +790,14 @@
   },
   "copiedLabel": {
     "message": "Copied."
+  },
+  "versionHistoryLabel": {
+    "message": "Version history"
+  },
+  "isEnableVersionHistoryFeatureLabel": {
+    "message": "Enable version history feature (Beta)"
+  },
+  "isEnableVersionHistoryFeatureCaptionLabel": {
+    "message": "Save the version history of those tracking-sessions."
   }
 }

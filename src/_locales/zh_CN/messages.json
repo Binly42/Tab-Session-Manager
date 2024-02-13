@@ -790,5 +790,14 @@
   },
   "copiedLabel": {
     "message": "已复制"
+  },
+  "versionHistoryLabel": {
+    "message": "Version history"
+  },
+  "isEnableVersionHistoryFeatureLabel": {
+    "message": "启用 version history feature (Beta)"
+  },
+  "isEnableVersionHistoryFeatureCaptionLabel": {
+    "message": "记录 各 tracking-session 的 版本历史。"
   }
 }

@@ -2,10 +2,12 @@
   "name": "tab-session-manager",
   "version": "0.0.0",
   "dependencies": {
+    "@isomorphic-git/lightning-fs": "^4.6.0",
     "axios": "^0.21.2",
     "browser-image-compression": "^1.0.14",
     "browser-info": "^1.2.0",
     "clone": "^2.1.2",
+    "isomorphic-git": "^1.25.3",
     "lodash": "^4.17.21",
     "loglevel": "^1.6.7",
     "moment": "^2.29.4",
