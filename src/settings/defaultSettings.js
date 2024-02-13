@@ -464,14 +464,14 @@ export default [
         title: "isShowOptionsPageWhenUpdatedLabel",
         captions: ["isShowOptionsPageWhenUpdatedCaptionLabel"],
         type: "checkbox",
-        default: true
+        default: false,
       },
       {
         id: "isDebugMode",
         title: "isDebugModeLabel",
         captions: ["isDebugModeCaptionLabel"],
         type: "checkbox",
-        default: false
+        default: true,
       }
     ]
   }

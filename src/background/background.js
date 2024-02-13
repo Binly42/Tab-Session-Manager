@@ -94,7 +94,7 @@ const onStartupListener = async () => {
   IsStartup = true;
 };
 
-const onMessageListener = async (request, sender, sendResponse) => {
+const onMessageListener = async (request, _sender, _sendResponse) => {
   log.info(logDir, "onMessageListener()", request);
   switch (request.message) {
     case "save": {

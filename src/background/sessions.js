@@ -36,7 +36,13 @@ export default {
     });
   },
 
+  /**
+   * - TODEL? actually never be called
+   * - TODO~  if interrupted, possibly data loss
+   *
+   */
   DBUpdate: async () => {
+    /* eslint-disable no-undef */
     log.log(logDir, "DBUpdate()");
     let sessions;
     try {
@@ -78,7 +84,7 @@ export default {
     const db = DB;
     const transaction = db.transaction("sessions", "readwrite");
     const store = transaction.objectStore("sessions");
-    const request = store.delete(id);
+    const _request = store.delete(id);
 
     return new Promise((resolve, reject) => {
       transaction.oncomplete = () => {
@@ -98,7 +104,7 @@ export default {
 
     const request = window.indexedDB.deleteDatabase("sessions");
 
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       request.onsuccess = () => {
         log.log(logDir, "=>deleteAll()", "success");
         resolve(Sessions.init());
