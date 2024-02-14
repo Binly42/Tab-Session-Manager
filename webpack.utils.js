@@ -72,8 +72,8 @@ const getCopyPlugins = (browserDir, outputDir = "dev", sourceDir = "src") => [
         to: path.resolve(__dirname, `${outputDir}/${browserDir}/manifest.json`)
       },
       {
-        from: `${sourceDir}/workers`,
-        to: path.resolve(__dirname, `${outputDir}/${browserDir}/workers`)
+        from: `${sourceDir}/workers/versionHistory.worker.js`,
+        to: path.resolve(__dirname, `${outputDir}/${browserDir}/workers/versionHistory.worker.js`)
       },
     ]
   })
@@ -95,8 +95,8 @@ const getFirefoxCopyPlugins = (browserDir, outputDir = "dev", sourceDir = "src")
         to: path.resolve(__dirname, `${outputDir}/${browserDir}/manifest.json`)
       },
       {
-        from: `${sourceDir}/workers`,
-        to: path.resolve(__dirname, `${outputDir}/${browserDir}/workers`)
+        from: `${sourceDir}/workers/versionHistory.worker.js`,
+        to: path.resolve(__dirname, `${outputDir}/${browserDir}/workers/versionHistory.worker.js`)
       },
     ]
   })

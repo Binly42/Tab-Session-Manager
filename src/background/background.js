@@ -223,6 +223,7 @@ try {
 
     // NOTE: (tested firefox)
     //      - unnecessary to pass the second arg `{ type: "module" }`
+    //      -   necessary to use the '../'
     //      - if not use `magic comments` like below, the bundled file would be placed at root of output
     //              and even seem to be named undefinedly ...
     //      - except 'where/how to config what', seems not much different from the above one
@@ -230,18 +231,25 @@ try {
             /* webpackChunkName: "workers/util.worker.bundle" */
             new URL("../workers/util.worker.js", import.meta.url)
         );
-    log.log(logDir, '_worker created:',
+    log.log(logDir, '_worker created:', _worker, 'using script:',
             new URL("../workers/util.worker.js", import.meta.url)
         );
     _worker.onmessage = (e) => window.console.log(e);
 
 
-    const version_history_worker_script_path = "../workers/versionHistory.worker.js"
-    console.log('version_history_worker_script_path:', version_history_worker_script_path);
-    const worker = new Worker(version_history_worker_script_path);
-    log.log(logDir, "done background new worker");
+    // NOTE: (tested firefox)
+    //      - must not use the second arg `{ type: "module" }`
+    //      - unnecessary to use the '../'  (maybe because src-folder ?)
+    //      - need raw copy (without bundle) to the destination  (here via webpack `CopyWebpackPlugin`)
+    //              e.g. when using webpack 5 way to create Worker, seems not respect `Module.locateFile` to fetch the '*.wasm'
+    //      - ad-hoc for pkg `wasm-git` (maybe concerning `emscripten` and/or the building ?)
+    const worker = window.vcs_worker = new Worker("workers/versionHistory.worker.js")
+    log.log(logDir, 'vcs_worker created:', worker)
     worker.onmessage = (e) => window.console.log(e);
-    window.ww = worker
+
+    // TODO: data -> background [-> util_worker -> background ] -> vcs_worker
+    // TODO~ https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers#passing_data_by_transferring_ownership_transferable_objects
+
 
     log.log(logDir, "done background init worker");
 } catch (e) {
