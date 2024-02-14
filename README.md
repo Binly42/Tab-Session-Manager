@@ -29,10 +29,10 @@ Support Tab Session Manager by [becoming a sponsor](https://www.patreon.com/join
 
 ## Tools
 
-**[Session Compressor](https://tab-session-manager.sienori.com/compressor/index.html)**  
+**[Session Compressor](https://tab-session-manager.sienori.com/compressor/index.html)**
 A tool for compressing sessions created by Tab Session Manager
 
-**[Save Tab Groups for Tab Session Manager](https://chrome.google.com/webstore/detail/aghdiknflpelpkepifoplhodcnfildao)**  
+**[Save Tab Groups for Tab Session Manager](https://chrome.google.com/webstore/detail/aghdiknflpelpkepifoplhodcnfildao)**
 Additional extension for saving tab groups in Tab Session Manager for Chrome
 
 ## Translation
@@ -43,8 +43,8 @@ You can contribute by translating Tab Session Manager on **[Crowdin](https://cro
 
 > Required: Node 18.17.1
 
-1. Clone the repository `git clone https://github.com/sienori/Tab-Session-Manager`  
-2. Create the file `src/credentials.js`  
+1. Clone the repository `git clone https://github.com/sienori/Tab-Session-Manager`
+2. Create the file `src/credentials.js`
   ```src/credentials.js
   export const clientId = "xxx"
   export const clientSecret = "xxx"
@@ -62,6 +62,10 @@ You can contribute by translating Tab Session Manager on **[Crowdin](https://cro
 
 1. Open Firefox browser and navigate to `about:debugging`
 2. Click "Load Temporary Add-on" and from the file browser, choose `tab-session-manager/dev/firefox`
+
+## TODOs
+
+- [ ] for webworker, stop import pkg from https://unpkg.com
 
 ## Privacy Policy
 

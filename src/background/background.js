@@ -212,3 +212,24 @@ browser.commands.onCommand.addListener(onCommandListener);                  log.
 log.log(logDir, "before background last init");
 const _init_ret = init();
 log.log(logDir, "done background last init:", _init_ret);
+
+try {
+    const trial_worker_script_path = "workers/_trial_worker.js"  // this path works, maybe because src-folder ?
+    console.log('trial_worker_script_path:', trial_worker_script_path);
+    const _worker = new Worker(trial_worker_script_path);
+    log.log(logDir, "done background new _worker");
+    _worker.onmessage = (e) => window.console.log(e);
+    window._ww = _worker
+
+    const version_history_worker_script_path = "../workers/versionHistory.worker.js"
+    console.log('version_history_worker_script_path:', version_history_worker_script_path);
+    const worker = new Worker(version_history_worker_script_path);
+    log.log(logDir, "done background new worker");
+    worker.onmessage = (e) => window.console.log(e);
+    window.ww = worker
+
+    log.log(logDir, "done background init worker");
+} catch (e) {
+    log.log('//////////////////////////////////', "error background setup worker", e);
+}
+

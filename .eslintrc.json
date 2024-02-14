@@ -32,7 +32,7 @@
 
     "overrides": [
         {
-            "files": "**/*.worker.js",
+            "files": "**/*worker.js",
             "env": {
                 "worker": true
             }
