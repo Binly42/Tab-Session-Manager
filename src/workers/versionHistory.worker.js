@@ -15,7 +15,7 @@ Module.onRuntimeInitialized = async () => {
     const lg = Module;
 
     // TODO~ seems FS and MEMFS are all somehow naturally global, how to adapt eslint and vscode ?
-    // NOTE: for the simple '_trial_worker.js' (without Module nor wasm-git), they are not global
+    // NOTE: for a simple 'worker.js' (without Module nor wasm-git), they are not global
 
     // const FS = lg.FS
     // const MEMFS = lg.MEMFS

@@ -220,12 +220,21 @@ try {
     const _example_worker = window._example_worker = new Worker("workers/example.worker.bundle.js")
     _example_worker.onmessage = (e) => window.console.log(e);
 
-    const trial_worker_script_path = "workers/_trial_worker.js"  // this path works, maybe because src-folder ?
-    console.log('trial_worker_script_path:', trial_worker_script_path);
-    const _worker = new Worker(trial_worker_script_path);
-    log.log(logDir, "done background new _worker");
+
+    // NOTE: (tested firefox)
+    //      - unnecessary to pass the second arg `{ type: "module" }`
+    //      - if not use `magic comments` like below, the bundled file would be placed at root of output
+    //              and even seem to be named undefinedly ...
+    //      - except 'where/how to config what', seems not much different from the above one
+    const _worker = window._worker = new Worker(
+            /* webpackChunkName: "workers/util.worker.bundle" */
+            new URL("../workers/util.worker.js", import.meta.url)
+        );
+    log.log(logDir, '_worker created:',
+            new URL("../workers/util.worker.js", import.meta.url)
+        );
     _worker.onmessage = (e) => window.console.log(e);
-    window._ww = _worker
+
 
     const version_history_worker_script_path = "../workers/versionHistory.worker.js"
     console.log('version_history_worker_script_path:', version_history_worker_script_path);
