@@ -214,6 +214,12 @@ const _init_ret = init();
 log.log(logDir, "done background last init:", _init_ret);
 
 try {
+    // NOTE: (tested both firefox and chrome)
+    //      - unnecessary to pass the second arg `{ type: "module" }`
+    //      - unnecessary to use the '../'  (maybe because src-folder ?)
+    const _example_worker = window._example_worker = new Worker("workers/example.worker.bundle.js")
+    _example_worker.onmessage = (e) => window.console.log(e);
+
     const trial_worker_script_path = "workers/_trial_worker.js"  // this path works, maybe because src-folder ?
     console.log('trial_worker_script_path:', trial_worker_script_path);
     const _worker = new Worker(trial_worker_script_path);

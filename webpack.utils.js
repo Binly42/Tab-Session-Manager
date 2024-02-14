@@ -40,7 +40,9 @@ const getHTMLPlugins = (browserDir, outputDir = "dev", sourceDir = "src") => [
 const getOutput = (browserDir, outputDir = "dev") => {
   return {
     path: path.resolve(__dirname, `${outputDir}/${browserDir}`),
-    filename: "[name]/[name].js"
+    filename: (pathData) => {
+      return pathData.chunk.name.match(/[_.]worker$/) ? 'workers/[name].bundle.js' : "[name]/[name].js";
+    },
   };
 };
 
@@ -49,7 +51,8 @@ const getEntry = (sourceDir = "src") => {
     popup: path.resolve(__dirname, `${sourceDir}/popup/index.js`),
     options: path.resolve(__dirname, `${sourceDir}/options/index.js`),
     replaced: path.resolve(__dirname, `${sourceDir}/replaced/replaced.js`),
-    background: path.resolve(__dirname, `${sourceDir}/background/background.js`)
+    background: path.resolve(__dirname, `${sourceDir}/background/background.js`),
+    'example.worker': path.resolve(__dirname, `${sourceDir}/workers/example.worker.js`),
   };
 };
 
