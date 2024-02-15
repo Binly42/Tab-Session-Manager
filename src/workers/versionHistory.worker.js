@@ -3,13 +3,22 @@
 // TODO~ DRY 'package.json' for pkg version
 
 
-var Module = {
+self.Module = {
     locateFile: function (s) {
         return 'https://unpkg.com/wasm-git@^0.0.12/' + s;
     }
 };
 
+// NOTE: cannot use import statement nor dynamic import on pkg `wasm-git`
+//      (even used the second arg `{ type: "module" }` when create Worker)
+//      (maybe concerning `emscripten` and/or its building ?)
 importScripts('https://unpkg.com/wasm-git@^0.0.12/lg2.js');
+
+import { sliceTextByBytes } from '../common/sliceTextByBytes'
+self.sliceTextByBytes = sliceTextByBytes
+
+import uuidv4 from "uuid/v4"
+self.uuidv4 = uuidv4
 
 Module.onRuntimeInitialized = async () => {
     const lg = Module;
@@ -38,12 +47,14 @@ Module.onRuntimeInitialized = async () => {
 
 onmessage = function (e) {
     console.log('Worker: Message received from main script');
-    const result = e.data[0] * e.data[1];
-    if (isNaN(result)) {
-        postMessage('Please write two numbers');
-    } else {
-        const workerResult = 'Result: ' + result;
+    try {
+        const result = sliceTextByBytes(e.data[0], e.data[1])
+        const workerResult = 'Result: ' + result + `  (uuid:${uuidv4()}`;
         console.log('Worker: Posting message back to main script');
         postMessage(workerResult);
+    } catch (err) {
+        const s = 'Worker catch:' + err
+        console.log('Worker: handle-ing message{', e, '} --> ', s);
+        postMessage(s)
     }
 }

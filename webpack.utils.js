@@ -70,11 +70,7 @@ const getCopyPlugins = (browserDir, outputDir = "dev", sourceDir = "src") => [
       {
         from: `${sourceDir}/manifest.json`,
         to: path.resolve(__dirname, `${outputDir}/${browserDir}/manifest.json`)
-      },
-      {
-        from: `${sourceDir}/workers/versionHistory.worker.js`,
-        to: path.resolve(__dirname, `${outputDir}/${browserDir}/workers/versionHistory.worker.js`)
-      },
+      }
     ]
   })
 ];
@@ -93,11 +89,7 @@ const getFirefoxCopyPlugins = (browserDir, outputDir = "dev", sourceDir = "src")
       {
         from: `${sourceDir}/manifest-ff.json`,
         to: path.resolve(__dirname, `${outputDir}/${browserDir}/manifest.json`)
-      },
-      {
-        from: `${sourceDir}/workers/versionHistory.worker.js`,
-        to: path.resolve(__dirname, `${outputDir}/${browserDir}/workers/versionHistory.worker.js`)
-      },
+      }
     ]
   })
 ];
