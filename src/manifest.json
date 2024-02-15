@@ -27,7 +27,7 @@
       "background/background.js"
     ]
   },
-  "content_security_policy": "script-src 'wasm-unsafe-eval' 'self' https://unpkg.com; object-src 'self'",
+  "content_security_policy": "script-src 'wasm-unsafe-eval' 'self'; object-src 'self'",
   "browser_action": {
     "default_icon": {
       "16": "icons/icon_min.png",

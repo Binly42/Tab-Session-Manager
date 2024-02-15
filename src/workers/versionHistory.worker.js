@@ -1,18 +1,27 @@
-// NOTE: seems still not much easy to `use npm package inside webworker` ,
-//      thus here just refer to wasm-git doc for development and debugging
-// TODO~ DRY 'package.json' for pkg version
-
-
 self.Module = {
-    locateFile: function (s) {
-        return 'https://unpkg.com/wasm-git@^0.0.12/' + s;
+    locateFile: function (path, prefix) {
+        postMessage(`[debug] ${import.meta.url} Module.locateFile() path:${path}`)
+        postMessage(`[debug] ${import.meta.url} Module.locateFile() prefix:${prefix}`)
+
+        return './node_modules/wasm-git/' + path
+
+        // default, the prefix (JS file's dir) + the path
+        // return prefix + path
     }
 };
 
 // NOTE: cannot use import statement nor dynamic import on pkg `wasm-git`
 //      (even used the second arg `{ type: "module" }` when create Worker)
 //      (maybe concerning `emscripten` and/or its building ?)
-importScripts('https://unpkg.com/wasm-git@^0.0.12/lg2.js');
+// TODO~ 搞懂 wasm-git 和 emscripten 的 build , 以及 npm script 或者 webpack ;
+//      从而实现: 每次构建完后直接在 workers/ 目录下存在 lib_wasm-git.emscripten.js 和 同名.wasm ,
+//          而且在 worker.js 这里面直接 importScripts('lib_wasm-git.emscripten.js') ,
+//          到时候应该连 Module.locateFile 就都不用定制了?
+//      甚至最好能实现: 正常用 import statement
+//      这样的好处在于: 所import的东西以及相关代码结构更明确更清晰, 而且应该就天然能支持 multiple import
+// NOTE: Module.locateFile 里的 prefix 是对应 worker.js (而非 emscripten.js) 的 所在目录
+// NOTE: 目前 wasm-git 的 lg2.js 里是 绑死了要安装的是`lg2.wasm`, 所以暂时就还是用 `CopyWebpackPlugin` raw copy
+importScripts('./node_modules/wasm-git/lg2.js');
 
 import { sliceTextByBytes } from '../common/sliceTextByBytes'
 self.sliceTextByBytes = sliceTextByBytes

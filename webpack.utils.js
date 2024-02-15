@@ -70,7 +70,11 @@ const getCopyPlugins = (browserDir, outputDir = "dev", sourceDir = "src") => [
       {
         from: `${sourceDir}/manifest.json`,
         to: path.resolve(__dirname, `${outputDir}/${browserDir}/manifest.json`)
-      }
+      },
+      {
+        from: `${path.dirname(require.resolve('wasm-git/package.json'),)}/*.{js,wasm}`,
+        to: path.resolve(__dirname, `${outputDir}/${browserDir}/workers`)
+      },
     ]
   })
 ];
@@ -89,7 +93,11 @@ const getFirefoxCopyPlugins = (browserDir, outputDir = "dev", sourceDir = "src")
       {
         from: `${sourceDir}/manifest-ff.json`,
         to: path.resolve(__dirname, `${outputDir}/${browserDir}/manifest.json`)
-      }
+      },
+      {
+        from: `${path.dirname(require.resolve('wasm-git/package.json'),)}/*.{js,wasm}`,
+        to: path.resolve(__dirname, `${outputDir}/${browserDir}/workers`)
+      },
     ]
   })
 ];
