@@ -215,26 +215,13 @@ log.log(logDir, "done background last init:", _init_ret);
 
 try {
     // NOTE: (tested both firefox and chrome)
-    //      - unnecessary to pass the second arg `{ type: "module" }`
+    //      - must not use the second arg `{ type: "module" }`
     //      - unnecessary to use the '../'  (maybe because src-folder ?)
-    const _example_worker = window._example_worker = new Worker("workers/example.worker.bundle.js")
-    _example_worker.onmessage = (e) => window.console.log(e);
-
-
-    // NOTE: (tested firefox)
-    //      - unnecessary to pass the second arg `{ type: "module" }`
-    //      -   necessary to use the '../'
-    //      - if not use `magic comments` like below, the bundled file would be placed at root of output
-    //              and even seem to be named undefinedly ...
-    //      - except 'where/how to config what', seems not much different from the above one
-    const worker = window.vcs_worker = new Worker(
-            /* webpackChunkName: "workers/versionHistory.worker.bundle" */
-            new URL("../workers/versionHistory.worker.js", import.meta.url)
-    );
-    log.log(logDir, 'vcs_worker created:', worker, 'using script:',
-            new URL("../workers/versionHistory.worker.js", import.meta.url)
-        );
+    const worker = window.vcs_worker = new Worker("workers/versionHistory.worker.bundle.js");
+    log.log(logDir, 'vcs_worker created:', worker);
     worker.onmessage = (e) => window.console.log(e);
+
+    // NOTE: there had been some other ways for 'kinds of import problems in worker.js' during previous several commits
 
     // TODO~ https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers#passing_data_by_transferring_ownership_transferable_objects
 

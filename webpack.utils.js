@@ -52,7 +52,7 @@ const getEntry = (sourceDir = "src") => {
     options: path.resolve(__dirname, `${sourceDir}/options/index.js`),
     replaced: path.resolve(__dirname, `${sourceDir}/replaced/replaced.js`),
     background: path.resolve(__dirname, `${sourceDir}/background/background.js`),
-    'example.worker': path.resolve(__dirname, `${sourceDir}/workers/example.worker.js`),
+    'versionHistory.worker': path.resolve(__dirname, `${sourceDir}/workers/versionHistory.worker.js`),
   };
 };
 
