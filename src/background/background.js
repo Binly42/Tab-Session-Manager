@@ -228,6 +228,92 @@ try {
 
     log.log(logDir, "done background init worker");
 } catch (e) {
-    log.log('//////////////////////////////////', "error background setup worker", e);
+    log.error(logDir, "background setup worker error:", e);
 }
 
+
+
+
+const TST_ID = self.TST_ID = 'treestyletab@piro.sakura.ne.jp';
+
+async function registerToTST() {
+    try {
+        let result = await browser.runtime.sendMessage(TST_ID, {
+            type: 'register-self',
+            name: browser.i18n.getMessage('extensionName'),
+            icons: browser.runtime.getManifest().icons,
+            listeningTypes: [
+                'ready',                // for restart
+                'permissions-changed',
+                'wait-for-shutdown',    // let this extension able to be auto unregistered by TST
+            ],
+            allowBulkMessaging: true,
+            permissions: ['tabs'],
+        })
+        if (!result) {
+            log.error(logDir, 'registerToTST() fail ?', `(from ${TST_ID})`)
+        } else {
+            log.info(logDir, 'done registerToTST() :', result, `(from ${TST_ID})`)
+        }
+    } catch (e) {
+        log.error(logDir, 'registerToTST() error:', e, `(from ${TST_ID})`)
+    }
+}
+
+const promisedShutdown = new Promise((resolve, _reject) => {
+    // TODO~ test whether would really timeout in real scene if not do anything here
+    //      ref: https://github.com/piroor/treestyletab/issues/2313#issuecomment-1947777088
+    self.addEventListener('beforeunload', () => resolve(true));
+})
+
+function onMessageExternal_TST(message, _sender) {
+    switch (message.type) {
+        case 'wait-for-shutdown':
+            return promisedShutdown
+
+        case 'ready':
+        case 'permissions-changed':
+            // TODO~ add timeout ?
+            registerToTST()
+            break
+    }
+}
+
+
+function onMessageExternalListener(message, sender) {
+    log.debug(logDir, 'onMessageExternalListener:', message, sender)
+    switch (sender.id) {
+        case TST_ID:
+            return onMessageExternal_TST(message, sender)
+    }
+}
+
+browser.runtime.onMessageExternal.addListener(onMessageExternalListener)
+await registerToTST()
+
+// TODEL test
+self.tst = {
+    registerToTST,
+    promisedShutdown,
+    test: async (windowId) => {
+        const register_ret = await browser.runtime.sendMessage(TST_ID, {
+            type: 'register-self',
+            name: browser.i18n.getMessage('extensionName'),
+            icons: browser.runtime.getManifest().icons,
+            listeningTypes: [
+                'ready',                // for restart
+                'permissions-changed',
+                'wait-for-shutdown',    // let this extension able to be auto unregistered by TST
+            ],
+            allowBulkMessaging: true,
+            permissions: ['tabs'],
+        })
+        console.log(register_ret, `(from ${TST_ID})`)
+        const tabs_ret = await browser.runtime.sendMessage(TST_ID, {
+            type:   'get-tree',
+            tabs:   '*',
+            windowId,
+        })
+        console.log(tabs_ret[0].title, `(from ${TST_ID})`)
+    },
+}
