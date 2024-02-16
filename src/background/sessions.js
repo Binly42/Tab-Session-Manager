@@ -2,7 +2,7 @@ import Sessions from "./sessions";
 import log from "loglevel";
 
 import VersionHistory from "./versionHistory";
-window.vh = VersionHistory
+self.vh = VersionHistory
 
 const logDir = "background/sessions";
 
@@ -11,7 +11,7 @@ export default {
   init: () => {
     log.log(logDir, "init()");
     navigator.storage.persist();
-    const request = window.indexedDB.open("sessions", 1);
+    const request = self.indexedDB.open("sessions", 1);
 
     request.onupgradeneeded = e => {
       const db = request.result;
@@ -114,7 +114,7 @@ export default {
     log.log(logDir, "deleteAll()");
     DB.close("sessions");
 
-    const request = window.indexedDB.deleteDatabase("sessions");
+    const request = self.indexedDB.deleteDatabase("sessions");
 
     return new Promise((resolve, reject) => {
       request.onsuccess = () => {

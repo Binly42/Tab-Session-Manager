@@ -217,9 +217,9 @@ try {
     // NOTE: (tested both firefox and chrome)
     //      - must not use the second arg `{ type: "module" }`
     //      - unnecessary to use the '../'  (maybe because src-folder ?)
-    const worker = window.vcs_worker = new Worker("workers/versionHistory.worker.bundle.js");
+    const worker = self.vcs_worker = new Worker("workers/versionHistory.worker.bundle.js");
     log.log(logDir, 'vcs_worker created:', worker);
-    worker.onmessage = (e) => window.console.log(e);
+    worker.onmessage = (e) => self.console.log(e);
 
     // NOTE: there had been some other ways for 'kinds of import problems in worker.js' during previous several commits
 

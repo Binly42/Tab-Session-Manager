@@ -9,7 +9,7 @@ const handleApplyDeviceNameButtonClick = () => {
 };
 
 const getTheme = () =>
-  window.matchMedia('(prefers-color-scheme: dark)').matches ? "dark" : "light";
+  self.matchMedia('(prefers-color-scheme: dark)').matches ? "dark" : "light";
 
 export default [
   {

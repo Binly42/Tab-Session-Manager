@@ -11,9 +11,9 @@ import git from 'isomorphic-git'
 import LightningFS from '@isomorphic-git/lightning-fs'
 import Path from '@isomorphic-git/lightning-fs/src/path';
 
-window.git = git
-const fs = window.fs = new LightningFS('fs')
-const pfs = window.pfs = window.fs.promises
+self.git = git
+const fs = self.fs = new LightningFS('fs')
+const pfs = self.pfs = self.fs.promises
 
 
 const git_repo_dir = '/trial'
