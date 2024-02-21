@@ -7,6 +7,11 @@ self.Module = {
 
         // default, the prefix (JS file's dir) + the path
         // return prefix + path
+    },
+
+    'printErr': function (text) {
+        console.error(text);
+        postMessage('ERROR: '+text);
     }
 };
 
@@ -29,8 +34,17 @@ self.sliceTextByBytes = sliceTextByBytes
 import uuidv4 from "uuid/v4"
 self.uuidv4 = uuidv4
 
+
+self.log = (...params) => {
+    const t = params.join(' ')
+    console.log(t)
+    postMessage(t)
+}
+
 Module.onRuntimeInitialized = async () => {
     const lg = Module;
+    self.lg = lg
+    self.fs = FS
 
     // TODO~ seems FS and MEMFS are all somehow naturally global, how to adapt eslint and vscode ?
     // NOTE: for a simple 'worker.js' (without Module nor wasm-git), they are not global
@@ -43,27 +57,42 @@ Module.onRuntimeInitialized = async () => {
     FS.chdir('/working');
 
     FS.writeFile('/home/web_user/.gitconfig', '[user]\n' +
-        'name = Test User\n' +
-        'email = test@example.com');
+            'name = Test User\n' +
+            'email = test@example.com');
 
     // clone a local git repository and make some commits
 
-    await lg.callMain(['clone', `https://unpkg.com/browse/wasm-git@^0.0.12/test.git`, 'testrepo']);
+    try {
+        // 直接用 `npx http-server --port 9999` 的话, 死活无法clone (已经 `git update-server-info`) (终端里同样参数是可以clone的)
+        // 相比 /r /r/ /r.git , 现在这样起码不会404, 但依然会报 ERROR 12: early EOF
+        // lg.callMain(['clone', `http://localhost:9999/r/.git`, 'r']);
 
-    FS.readdir('testrepo');
+        lg.callMain(['clone', `https://github.com/petersalomonsen/githttpserver.git`, 'rg']);
+
+        // 用了 githttpserver (`GIT_PROJECT_ROOT=~/tmp/tession/ npm run start`) 之后, 确实就能clone本地的 ~/tmp/tession/r 了
+        // NOTE: 实测 最原始的r firefox(并没打开worker的inspect) 要花 25s 左右, 而 chromium 甚至都不用 10s ... (firefox已经重启过的了)
+        //      而且 firefox 如果在 打开worker的inspect 的情况下再开始clone的话, 还真就会慢得发指...
+        // TODO~ 小试了下, 似乎跟 flatpak版 无关
+        lg.callMain(['clone', `http://localhost:5000/r`, 'r']);
+    } catch (e) {
+        postMessage(e)
+    }
 }
 
 
 onmessage = function (e) {
-    console.log('Worker: Message received from main script');
+    console.log('Worker: Message received from main script', e);
     try {
-        const result = sliceTextByBytes(e.data[0], e.data[1])
-        const workerResult = 'Result: ' + result + `  (uuid:${uuidv4()}`;
-        console.log('Worker: Posting message back to main script');
-        postMessage(workerResult);
+        switch (e.data[0]) {
+            case 'git':
+                switch (e.data[1]) {
+                    default:
+                        return lg.callMain(e.data.slice(1))
+                }
+        }
     } catch (err) {
         const s = 'Worker catch:' + err
         console.log('Worker: handle-ing message{', e, '} --> ', s);
-        postMessage(s)
+        printErr(s)
     }
 }
