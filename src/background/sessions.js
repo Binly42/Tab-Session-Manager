@@ -7,6 +7,9 @@ self.vh = VersionHistory
 const logDir = "background/sessions";
 
 let DB;
+/**
+ * @remark `sessionStartTime` in indexedDB is const as the time whenever init background.js
+ */
 export default {
   init: () => {
     log.log(logDir, "init()");
